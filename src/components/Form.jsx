@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { addBook, deleteBook, fetchBook } from "../features/book/bookSlice";
 
 const Form = () => {
   const [emp, setEmp] = useState({});
   const dispatch = useDispatch();
   const { book } = useSelector((state) => state.book);
+
+  useEffect(() => {
+      dispatch(fetchBook())
+  }, []);
+  
+
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -13,18 +20,19 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch();
+    dispatch(addBook(emp));
+    setEmp({})
   };
-  
+
   return (
     <>
-      <div className="conatiner">
+      <div className="container">
         <div className="row">
           <div className="col-md-6 mx-auto">
             <h1 className="my-4">Employee Data Form : </h1>
             <form method="post" onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
+                <label htmlFor="eName" className="form-label">
                   Employee Name :
                 </label>
                 <input
@@ -33,12 +41,12 @@ const Form = () => {
                   value={emp.eName || ""}
                   onChange={handleChange}
                   className="form-control"
-                  id="exampleInputEmail1"
+                  id="eName"
                   aria-describedby="emailHelp"
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label">
+                <label htmlFor="email" className="form-label">
                   Email :
                 </label>
                 <input
@@ -47,11 +55,11 @@ const Form = () => {
                   value={emp.email || ""}
                   onChange={handleChange}
                   className="form-control"
-                  id="exampleInputPassword1"
+                  id="email"
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label">
+                <label htmlFor="password" className="form-label">
                   Password :
                 </label>
                 <input
@@ -60,7 +68,7 @@ const Form = () => {
                   value={emp.password || ""}
                   onChange={handleChange}
                   className="form-control"
-                  id="exampleInputPassword1"
+                  id="password"
                 />
               </div>
               <button type="submit" className="btn btn-primary">
@@ -93,7 +101,7 @@ const Form = () => {
                       <td>{item.password}</td>
                       <td>
                         <button className="btn btn-warning me-1">Edit</button>
-                        <button className="btn btn-danger me-1">Delete</button>
+                        <button className="btn btn-danger me-1" onClick={()=> dispatch(deleteBook(item.id))}>Delete</button>
                       </td>
                     </tr>
                   ))
