@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { db } from "../../firebase/config";
-import { collection, addDoc, deleteDoc,getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, deleteDoc,getDocs, doc, updateDoc } from "firebase/firestore";
 
 
 const initialState = {
@@ -12,6 +12,7 @@ const initialState = {
 // Reference 
 const bookRef = collection(db,'books')
 
+// Create
 export const addBook = createAsyncThunk('book/addBook',async (book,{rejectWithValue})=>{
     try {
         let docRef = await addDoc(bookRef,book)
@@ -21,6 +22,7 @@ export const addBook = createAsyncThunk('book/addBook',async (book,{rejectWithVa
     }
 })
 
+// Fetch
 export const fetchBook = createAsyncThunk('book/fetchBook',async (_,{rejectWithValue})=>{
     try {
         let snapShot = await getDocs(bookRef)
@@ -30,6 +32,7 @@ export const fetchBook = createAsyncThunk('book/fetchBook',async (_,{rejectWithV
     }
 })
 
+// Delete
 export const deleteBook = createAsyncThunk('book/deleteBook',async (id,{rejectWithValue})=>{
     try {
         const bookRef = doc(db,'books',id)
@@ -40,6 +43,17 @@ export const deleteBook = createAsyncThunk('book/deleteBook',async (id,{rejectWi
     }
 })
 
+// Update
+export const updateBook = createAsyncThunk('book/updateBook',async (updatedUser,{rejectWithValue})=>{
+    try {
+        let { id , ...data} = updatedUser
+        const updateRef = doc(db,'books',id)
+        await updateDoc(updateRef , data)
+        return updatedUser
+    } catch (error) {
+        return rejectWithValue(error.message)
+    }
+})
 
 
 export const bookSlice = createSlice({
@@ -88,6 +102,23 @@ export const bookSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         })
+
+        // Update
+        .addCase(updateBook.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(updateBook.fulfilled, (state, action) => {
+            state.loading = false;
+            state.book = state.book.map((item) =>
+            item.id === action.payload.id ? action.payload : item
+        );
+        })
+        .addCase(updateBook.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+
     },
 })
 

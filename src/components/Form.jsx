@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addBook, deleteBook, fetchBook } from "../features/book/bookSlice";
+import { addBook, deleteBook, fetchBook, updateBook } from "../features/book/bookSlice";
 
 const Form = () => {
   const [emp, setEmp] = useState({});
+  const [edit,setEdit] = useState(false)
+  const [editId , setEditId] = useState(null);
+
   const dispatch = useDispatch();
   const { book } = useSelector((state) => state.book);
 
   useEffect(() => {
       dispatch(fetchBook())
-  }, []);
+  }, [dispatch]);
   
 
 
@@ -20,9 +23,24 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addBook(emp));
+
+    if(edit){
+      dispatch(updateBook({...emp, id : editId}))
+      setEdit(false)
+      setEditId(null)
+    }
+    else{
+      dispatch(addBook(emp));
+    }
+    
     setEmp({})
   };
+
+  const handleEdit = (item)=>{
+    setEmp({...item})
+    setEdit(true)
+    setEditId(item.id)
+  }
 
   return (
     <>
@@ -100,7 +118,7 @@ const Form = () => {
                       <td>{item.email}</td>
                       <td>{item.password}</td>
                       <td>
-                        <button className="btn btn-warning me-1">Edit</button>
+                        <button className="btn btn-warning me-1" onClick={()=> handleEdit(item)}>Edit</button>
                         <button className="btn btn-danger me-1" onClick={()=> dispatch(deleteBook(item.id))}>Delete</button>
                       </td>
                     </tr>
