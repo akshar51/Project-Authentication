@@ -13,6 +13,7 @@ const SignIn = () => {
 
     const handleSubmit =(e)=>{
         e.preventDefault();
+        let {email,password} = user
         signInWithEmailAndPassword(auth,email,password)
         .then(()=>{
             console.log("sign-In successful")
