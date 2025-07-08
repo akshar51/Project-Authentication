@@ -19,7 +19,8 @@ const SignIn = () => {
             console.log("sign-In successful")
         })
         .catch((error)=>{
-            console.log(error)
+            console.log(error.code)
+            alert(`Wrong ${error.code}`)
         })
         setUser({})
     }
