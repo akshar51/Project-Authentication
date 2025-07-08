@@ -2,7 +2,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../firebase/config";
 
-const SignUp = () => {
+const SignIn = () => {
 
     const [user, setUser] = useState({});
     
@@ -15,7 +15,7 @@ const SignUp = () => {
         e.preventDefault();
         signInWithEmailAndPassword(auth,email,password)
         .then(()=>{
-            console.log("sign-up successful")
+            console.log("sign-In successful")
         })
         .catch((error)=>{
             console.log(error)
@@ -31,7 +31,7 @@ const SignUp = () => {
             <h1>Sign-In</h1>
             <form method="post" onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
+                <label htmlFor="email" className="form-label">
                   Email :
                 </label>
                 <input
@@ -40,12 +40,12 @@ const SignUp = () => {
                   value={user.email || ''}
                   onChange = {handleChange}
                   className="form-control"
-                  id="exampleInputEmail1"
+                  id="email"
                   aria-describedby="emailHelp"
                 />
               </div>
               <div className="mb-3">
-                <label htmlFor="exampleInputPassword1" className="form-label">
+                <label htmlFor="password" className="form-label">
                   Password :
                 </label>
                 <input
@@ -54,7 +54,7 @@ const SignUp = () => {
                   onChange = {handleChange}
                   type="password"
                   className="form-control"
-                  id="exampleInputPassword1"
+                  id="password"
                 />
               </div>
               <button type="submit" className="btn btn-primary">
@@ -68,4 +68,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
