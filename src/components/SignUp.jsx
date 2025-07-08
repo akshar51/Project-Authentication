@@ -1,10 +1,12 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../firebase/config";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
 
     const [user, setUser] = useState({});
+    const navi = useNavigate()
     
     const handleChange = (e)=>{
         let {name,value} = e.target;
@@ -17,6 +19,7 @@ const SignUp = () => {
         createUserWithEmailAndPassword(auth,email,password)
         .then(()=>{
             console.log("sign-up successful")
+            navi("/signin")
         })
         .catch((error)=>{
             console.log(error)
