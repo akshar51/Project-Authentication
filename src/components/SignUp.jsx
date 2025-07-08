@@ -13,6 +13,7 @@ const SignUp = () => {
 
     const handleSubmit =(e)=>{
         e.preventDefault();
+        let {email,password} = user
         createUserWithEmailAndPassword(auth,email,password)
         .then(()=>{
             console.log("sign-up successful")
