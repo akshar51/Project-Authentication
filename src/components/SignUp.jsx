@@ -19,7 +19,7 @@ const SignUp = () => {
         createUserWithEmailAndPassword(auth,email,password)
         .then(()=>{
             console.log("sign-up successful")
-            navi("/signin")
+            navi("/")
         })
         .catch((error)=>{
             console.log(error)
@@ -31,8 +31,8 @@ const SignUp = () => {
     <>
       <div className="container">
         <div className="row">
-          <div className="col-md-6 mx-auto mt-5">
-            <h1>Sign-Up</h1>
+          <div className="col-md-5 mx-auto mt-5 auth-card">
+            <h1 className="text-center">Sign-Up</h1>
             <form method="post" onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
